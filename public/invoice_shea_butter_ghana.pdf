@@ -1,0 +1,64 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1089 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 50 750 Tm
+12 TL
+(COMMERCIAL INVOICE) Tj T*
+() Tj T*
+(From: West Africa Shea Cooperative) Tj T*
+(Address: Plot 12 Industrial Area, Tema, Ghana) Tj T*
+(Date: 2025-05-12) Tj T*
+(Invoice No: WASC-EXP-2025-0391) Tj T*
+() Tj T*
+(Consignee: [Customer]) Tj T*
+() Tj T*
+(-------------------------------------------) Tj T*
+(Description           Qty      Unit Price) Tj T*
+(-------------------------------------------) Tj T*
+(Shea Butter          10,000 kg    8.40 EUR/kg) Tj T*
+((Refined, Grade A, Organic Certified)) Tj T*
+() Tj T*
+(Subtotal:                       84,000.00 EUR) Tj T*
+(Freight (FOB Tema):              2,100.00 EUR) Tj T*
+(Certificate of Origin:              85.00 EUR) Tj T*
+(Fumigation Certificate:            120.00 EUR) Tj T*
+() Tj T*
+(TOTAL:                          86,305.00 EUR) Tj T*
+(-------------------------------------------) Tj T*
+() Tj T*
+(Payment Terms: Net 45) Tj T*
+(Shipping: 3-4 weeks via Tema Port) Tj T*
+(Certifications: USDA Organic, Fair Trade,) Tj T*
+(                Global Shea Alliance Member) Tj T*
+(Incoterms: FOB Tema) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001382 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1452
+%%EOF

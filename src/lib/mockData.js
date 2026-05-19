@@ -315,3 +315,175 @@ export const INVOICE_SUGGESTIONS = [
   "Carbon Credits", "Renewable Certificates", "Solar PPA",
   "Wind PPA", "Biomass Pellets", "Green Hydrogen", "Battery Storage",
 ];
+
+export const INVOICE_CHECK_RESULTS = {
+  "invoice_argan_oil_morocco.pdf": {
+    thread_id: "INV-CHK-8A3F21D4",
+    material: "Argan Oil",
+    invoiced_price: 68.50,
+    supplier: "Cooperative Targanine",
+    quantity_kg: 2500,
+    steps: [
+      {
+        step: 1, agent: "Market Intelligence Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 8200).toISOString(),
+        completed_at: new Date(Date.now() - 4800).toISOString(),
+        output: {
+          fair_price_eur: 52.40, invoiced_price_eur: 68.50, price_gap_pct: 30.7,
+          price_verdict: "significantly_overpriced", seasonal_factor: "drought premium",
+          analysis: "The invoiced price of 68.50 EUR/kg is 30.7% above the current 30-day fair market value of 52.40 EUR/kg. While argan oil prices have risen due to the Moroccan drought, this invoice significantly exceeds even the drought-adjusted market rate. Comparable quotes from other certified cooperatives are currently in the 54-58 EUR/kg range for organic grade.",
+        },
+      },
+      {
+        step: 2, agent: "Risk & Web Intelligence Agent", model: "gemini-2.5-flash", model_provider: "Google Gemini (via LiteLLM)",
+        started_at: new Date(Date.now() - 4500).toISOString(),
+        completed_at: new Date(Date.now() - 2100).toISOString(),
+        output: {
+          risk_adjusted_fair_price_eur: 57.80, justifiable_premium_pct: 10.3, supply_scarcity: "tight",
+          risk_factors_supporting_premium: [
+            "25% yield reduction confirmed across Moroccan cooperatives",
+            "Drought expected to persist through Q3 2025",
+            "Cooperative Targanine is a certified organic supplier (premium justified)",
+          ],
+          risk_factors_against_premium: [
+            "Other cooperatives quoting 54-58 EUR/kg for same grade",
+            "Alternative sources in Israel available at 56 EUR/kg",
+            "Volume discount should apply at 2,500 kg order",
+            "No exclusive supply agreement in place",
+          ],
+          analysis: "A risk-adjusted fair price of 57.80 EUR/kg accounts for the genuine supply disruption (+10.3% premium). However, the invoiced price of 68.50 EUR/kg exceeds even the most generous risk adjustment. The supplier may be over-charging by exploiting drought-related urgency. At 2,500 kg volume, a discount should further reduce the price.",
+        },
+      },
+      {
+        step: 3, agent: "Procurement Advisor Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 1800).toISOString(),
+        completed_at: new Date(Date.now() - 200).toISOString(),
+        output: {
+          verdict: "REJECT", verdict_confidence: 0.88, fairness_score: 28,
+          suggested_counter_price_eur: 55.50, max_acceptable_price_eur: 58.00,
+          savings_potential_eur_per_kg: 10.50,
+          negotiation_points: [
+            "Reference competing quotes from other certified cooperatives (54-58 EUR/kg range)",
+            "Request volume discount for 2,500 kg order (standard is 3-5% above 2,000 kg)",
+            "Propose a 6-month framework agreement at 55.50 EUR/kg to secure supply and give supplier revenue certainty",
+            "If supplier insists on premium, request extended payment terms (net-90 instead of net-30)",
+          ],
+          timing_advice: "Act within 5 days. Drought conditions are worsening and prices will continue rising. A counter-offer now gives leverage before the next supply report.",
+          rationale: "This invoice is significantly overpriced at 30.7% above fair market value. Even accounting for genuine supply disruption and organic certification, the maximum justifiable price is 58 EUR/kg. The supplier appears to be exploiting drought-driven urgency. Recommend rejecting and counter-offering at 55.50 EUR/kg with a framework agreement to provide supply certainty.",
+        },
+      },
+    ],
+  },
+
+  "invoice_peak_power_fr_q3.pdf": {
+    thread_id: "INV-CHK-2C7B94E8",
+    material: "Peak Power FR",
+    invoiced_price: 118.00,
+    supplier: "EDF Trading",
+    quantity_kg: null,
+    steps: [
+      {
+        step: 1, agent: "Market Intelligence Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 7800).toISOString(),
+        completed_at: new Date(Date.now() - 5200).toISOString(),
+        output: {
+          fair_price_eur: 112.80, invoiced_price_eur: 118.00, price_gap_pct: 4.6,
+          price_verdict: "slightly_high", seasonal_factor: "summer peak premium",
+          analysis: "The invoiced price of 118 EUR/MWh for Q3 2025 peak power is 4.6% above the current fair value of 112.80 EUR/MWh. Q3 peak pricing typically carries a seasonal premium due to lower nuclear availability during maintenance season and higher cooling demand. The current forward curve shows Q3 peaking at 115-120 EUR/MWh, placing this invoice within the upper range but not unreasonable.",
+        },
+      },
+      {
+        step: 2, agent: "Risk & Web Intelligence Agent", model: "gemini-2.5-flash", model_provider: "Google Gemini (via LiteLLM)",
+        started_at: new Date(Date.now() - 4900).toISOString(),
+        completed_at: new Date(Date.now() - 2600).toISOString(),
+        output: {
+          risk_adjusted_fair_price_eur: 116.50, justifiable_premium_pct: 3.3, supply_scarcity: "normal",
+          risk_factors_supporting_premium: [
+            "French nuclear fleet maintenance schedule concentrated in July-August",
+            "Interconnector capacity to Germany reduced for planned works",
+            "Heatwave probability above average for Southern France in Q3",
+          ],
+          risk_factors_against_premium: [
+            "Solar generation at all-time high, offsetting peak demand",
+            "Belgium nuclear extension removes capacity risk",
+            "Demand forecasts flat due to industrial slowdown",
+          ],
+          analysis: "The risk-adjusted fair price of 116.50 EUR/MWh accounts for nuclear maintenance risk and seasonal factors. The invoiced price of 118 EUR/MWh is only 1.3% above this adjusted value, which is within normal negotiation range. Supply situation is manageable with no acute disruption risk.",
+        },
+      },
+      {
+        step: 3, agent: "Procurement Advisor Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 2300).toISOString(),
+        completed_at: new Date(Date.now() - 400).toISOString(),
+        output: {
+          verdict: "NEGOTIATE", verdict_confidence: 0.72, fairness_score: 62,
+          suggested_counter_price_eur: 114.50, max_acceptable_price_eur: 117.00,
+          savings_potential_eur_per_kg: null,
+          negotiation_points: [
+            "Reference current forward curve mid-point at 115 EUR/MWh for Q3 delivery",
+            "Propose baseload + peak bundle to improve overall rate (EDF can offer both)",
+            "Request price review clause if nuclear availability exceeds 88% in Q3",
+            "Consider splitting volume across Q3 months to capture intra-quarter price variation",
+          ],
+          timing_advice: "Lock in within 2 weeks. Forward prices may rise if summer weather forecasts turn bullish. Current pricing is reasonable for a fixed-price contract.",
+          rationale: "This invoice is slightly above fair value but within acceptable range given seasonal risk premiums. A small negotiation should bring it to 114.50-117 EUR/MWh. The price is not unreasonable for a fixed Q3 peak contract with a tier-1 counterparty. Recommend negotiating for 2-3% reduction rather than rejecting outright.",
+        },
+      },
+    ],
+  },
+
+  "invoice_shea_butter_ghana.pdf": {
+    thread_id: "INV-CHK-F1D6A3B7",
+    material: "Shea Butter",
+    invoiced_price: 8.40,
+    supplier: "West Africa Shea Cooperative",
+    quantity_kg: 10000,
+    steps: [
+      {
+        step: 1, agent: "Market Intelligence Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 8500).toISOString(),
+        completed_at: new Date(Date.now() - 5900).toISOString(),
+        output: {
+          fair_price_eur: 9.20, invoiced_price_eur: 8.40, price_gap_pct: -8.7,
+          price_verdict: "below_market", seasonal_factor: "post-harvest discount",
+          analysis: "The invoiced price of 8.40 EUR/kg is 8.7% below the current 30-day fair market value of 9.20 EUR/kg. This is a below-market quote, likely reflecting a post-harvest surplus in the Ghana-Burkina Faso corridor. The Tema port congestion has cleared, and cooperatives are eager to move stock before rainy season storage costs kick in.",
+        },
+      },
+      {
+        step: 2, agent: "Risk & Web Intelligence Agent", model: "gemini-2.5-flash", model_provider: "Google Gemini (via LiteLLM)",
+        started_at: new Date(Date.now() - 5600).toISOString(),
+        completed_at: new Date(Date.now() - 3200).toISOString(),
+        output: {
+          risk_adjusted_fair_price_eur: 9.45, justifiable_premium_pct: 0, supply_scarcity: "abundant",
+          risk_factors_supporting_premium: [],
+          risk_factors_against_premium: [
+            "Tema port congestion cleared, logistics normalized",
+            "Post-harvest surplus available from multiple cooperatives",
+            "10,000 kg volume warrants 5-8% bulk discount",
+            "Quality certifications confirmed (organic, fair trade)",
+            "No political disruption on Ghana export routes",
+          ],
+          analysis: "No risk premium is justified. Supply is abundant post-harvest with normalized logistics. The political instability in Burkina Faso does not affect this specific trade route (Tema port, Ghana). The supplier's organic and fair trade certifications are confirmed, adding quality assurance without additional risk. This is a genuinely good deal.",
+        },
+      },
+      {
+        step: 3, agent: "Procurement Advisor Agent", model: "azure-gpt-4o", model_provider: "Azure OpenAI (via LiteLLM)",
+        started_at: new Date(Date.now() - 2900).toISOString(),
+        completed_at: new Date(Date.now() - 300).toISOString(),
+        output: {
+          verdict: "GREAT_DEAL", verdict_confidence: 0.94, fairness_score: 92,
+          suggested_counter_price_eur: null, max_acceptable_price_eur: 9.20,
+          savings_potential_eur_per_kg: null,
+          negotiation_points: [
+            "Accept immediately at stated price, no counter-offer needed",
+            "Consider increasing order to 15,000 kg to take advantage of the seasonal window",
+            "Request option to extend at same price for a follow-up order within 60 days",
+            "Lock in a Q4 delivery option at 8.80 EUR/kg before harvest surplus is absorbed",
+          ],
+          timing_advice: "Accept within 48 hours. Post-harvest surplus windows typically last 3-4 weeks and other buyers will move on this price. Delaying risks losing the opportunity.",
+          rationale: "This is an excellent deal, 8.7% below fair market value with no identified risks. The post-harvest surplus in Ghana creates a genuine buying opportunity. The supplier's certifications are valid and the trade route is clear. Recommend immediate acceptance and exploring whether to increase the order volume. Savings of 0.80 EUR/kg on 10,000 kg represents 8,000 EUR below market rate.",
+        },
+      },
+    ],
+  },
+};

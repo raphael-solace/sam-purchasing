@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 942 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 50 750 Tm
+12 TL
+(INVOICE) Tj T*
+() Tj T*
+(From: Cooperative Targanine) Tj T*
+(Address: Route de lEssaouira, Agadir, Morocco) Tj T*
+(Date: 2025-05-15) Tj T*
+(Invoice No: CT-2025-0847) Tj T*
+() Tj T*
+(Bill To: [Customer]) Tj T*
+() Tj T*
+(-------------------------------------------) Tj T*
+(Description           Qty      Unit Price) Tj T*
+(-------------------------------------------) Tj T*
+(Argan Oil             2,500 kg   68.50 EUR/kg) Tj T*
+((Organic, Cold-Pressed, Cosmetic Grade)) Tj T*
+() Tj T*
+(Subtotal:                      171,250.00 EUR) Tj T*
+(Shipping (CIF Rotterdam):        4,200.00 EUR) Tj T*
+(Phytosanitary Certificate:         180.00 EUR) Tj T*
+() Tj T*
+(TOTAL:                         175,630.00 EUR) Tj T*
+(-------------------------------------------) Tj T*
+() Tj T*
+(Payment Terms: Net 30) Tj T*
+(Delivery: 4-6 weeks from order confirmation) Tj T*
+(Certification: ECOCERT Organic, Fair Trade) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001234 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1304
+%%EOF

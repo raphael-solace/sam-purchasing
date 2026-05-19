@@ -1,17 +1,10 @@
 import { useState } from "react";
 import {
   FileCheck, TrendingUp, Shield, ShoppingCart, Loader2, ArrowDown,
-  CheckCircle, XCircle, AlertTriangle, ThumbsUp, Scale, Sparkles,
-  Upload, FileText, X,
+  CheckCircle, XCircle, AlertTriangle, ThumbsUp, Scale,
+  Upload, FileText, Download,
 } from "lucide-react";
-
-const SUGGESTIONS = [
-  "Argan Oil", "Shea Butter", "Rose Extract", "Jojoba Oil", "Vanilla",
-  "Palmarosa Oil", "Coconut Oil", "Almond Oil", "Lavender Oil",
-  "Baseload Power", "Peak Power", "Off-Peak Power", "Natural Gas",
-  "Carbon Credits", "Renewable Certificates", "Solar PPA",
-  "Wind PPA", "Biomass Pellets", "Green Hydrogen", "Battery Storage",
-];
+import { INVOICE_CHECK_RESULTS } from "../lib/mockData";
 
 const VERDICT_CONFIG = {
   ACCEPT: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-50", border: "border-green-200", label: "Accept" },
@@ -24,6 +17,12 @@ const PRICE_VERDICT_CLS = {
   fair: "text-green-600", good_deal: "text-green-700", below_market: "text-green-700",
   slightly_high: "text-yellow-600", overpriced: "text-orange-600", significantly_overpriced: "text-red-600",
 };
+
+const SAMPLE_FILES = [
+  { name: "invoice_argan_oil_morocco.pdf", label: "Argan Oil (Morocco)", desc: "2,500 kg at 68.50 EUR/kg" },
+  { name: "invoice_peak_power_fr_q3.pdf", label: "Peak Power FR (Q3)", desc: "50 MW at 118 EUR/MWh" },
+  { name: "invoice_shea_butter_ghana.pdf", label: "Shea Butter (Ghana)", desc: "10,000 kg at 8.40 EUR/kg" },
+];
 
 function FairnessGauge({ score }) {
   if (score == null) return null;
@@ -79,8 +78,8 @@ function StepCard({ step, stepNum }) {
       {stepNum === 1 && (
         <div className="space-y-2">
           <div className="grid grid-cols-3 gap-2 text-xs">
-            {o.fair_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Fair Market Price</p><p className="text-2xl font-bold text-gray-900">{o.fair_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €</span></p></div>}
-            {o.invoiced_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Invoiced Price</p><p className="text-2xl font-bold text-gray-900">{o.invoiced_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €</span></p></div>}
+            {o.fair_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Fair Market Price</p><p className="text-2xl font-bold text-gray-900">{o.fair_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR</span></p></div>}
+            {o.invoiced_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Invoiced Price</p><p className="text-2xl font-bold text-gray-900">{o.invoiced_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR</span></p></div>}
             {o.price_gap_pct != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Gap vs. Fair</p><p className={`text-2xl font-bold ${o.price_gap_pct > 5 ? "text-red-600" : o.price_gap_pct > 0 ? "text-yellow-600" : "text-green-600"}`}>{o.price_gap_pct > 0 ? "+" : ""}{o.price_gap_pct?.toFixed(1)}%</p></div>}
           </div>
           {o.price_verdict && <div className="flex items-center gap-2"><span className="text-xs font-medium text-gray-500">Price verdict:</span><span className={`text-xs font-bold px-2 py-0.5 rounded-full ${PRICE_VERDICT_CLS[o.price_verdict] || "text-gray-600"} bg-white`}>{o.price_verdict?.replace(/_/g, " ")}</span>{o.seasonal_factor && <span className="text-[10px] text-gray-400">Season: {o.seasonal_factor}</span>}</div>}
@@ -91,7 +90,7 @@ function StepCard({ step, stepNum }) {
       {stepNum === 2 && (
         <div className="space-y-2">
           <div className="grid grid-cols-3 gap-2 text-xs">
-            {o.risk_adjusted_fair_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Risk-Adjusted Fair Price</p><p className="text-2xl font-bold text-gray-900">{o.risk_adjusted_fair_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €</span></p></div>}
+            {o.risk_adjusted_fair_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Risk-Adjusted Fair Price</p><p className="text-2xl font-bold text-gray-900">{o.risk_adjusted_fair_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR</span></p></div>}
             {o.justifiable_premium_pct != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Justifiable Premium</p><p className="text-xl font-bold text-gray-900">+{o.justifiable_premium_pct?.toFixed(1)}%</p></div>}
             {o.supply_scarcity && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Supply Status</p><p className={`text-sm font-bold ${o.supply_scarcity === "scarce" ? "text-red-600" : o.supply_scarcity === "tight" ? "text-orange-600" : "text-green-600"}`}>{o.supply_scarcity}</p></div>}
           </div>
@@ -118,9 +117,9 @@ function StepCard({ step, stepNum }) {
             );
           })()}
           <div className="grid grid-cols-3 gap-2 text-xs">
-            {o.suggested_counter_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Suggested Counter</p><p className="text-xl font-bold text-green-700">{o.suggested_counter_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €</span></p></div>}
-            {o.max_acceptable_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Max Acceptable</p><p className="text-xl font-bold text-gray-900">{o.max_acceptable_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €</span></p></div>}
-            {o.savings_potential_eur_per_kg != null && o.savings_potential_eur_per_kg > 0 && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Savings Potential</p><p className="text-xl font-bold text-green-600">{o.savings_potential_eur_per_kg?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> €/kg</span></p></div>}
+            {o.suggested_counter_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Suggested Counter</p><p className="text-xl font-bold text-green-700">{o.suggested_counter_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR</span></p></div>}
+            {o.max_acceptable_price_eur != null && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Max Acceptable</p><p className="text-xl font-bold text-gray-900">{o.max_acceptable_price_eur?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR</span></p></div>}
+            {o.savings_potential_eur_per_kg != null && o.savings_potential_eur_per_kg > 0 && <div className="bg-white rounded-lg p-3 text-center"><p className="text-gray-400 text-[10px] mb-1">Savings Potential</p><p className="text-xl font-bold text-green-600">{o.savings_potential_eur_per_kg?.toFixed(2)}<span className="text-sm font-normal text-gray-400"> EUR/kg</span></p></div>}
           </div>
           {o.negotiation_points?.length > 0 && <div className="bg-white rounded-lg p-3 space-y-1.5"><p className="text-[10px] font-semibold text-gray-500 uppercase">Negotiation points:</p>{o.negotiation_points.map((p, i) => <p key={i} className="text-sm text-gray-800 flex items-start gap-2"><span className="text-brand-600 font-bold shrink-0">{i + 1}.</span>{p}</p>)}</div>}
           {o.timing_advice && <p className="text-xs text-gray-500 bg-white rounded-lg p-2 italic">{o.timing_advice}</p>}
@@ -132,68 +131,44 @@ function StepCard({ step, stepNum }) {
 }
 
 export default function InvoiceCheck() {
-  const [material, setMaterial] = useState("");
-  const [price, setPrice] = useState("");
-  const [supplier, setSupplier] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [uploadLoading, setUploadLoading] = useState(false);
-  const [uploadItems, setUploadItems] = useState(null);
-
-  const filteredSuggestions = material
-    ? SUGGESTIONS.filter((s) => s.toLowerCase().includes(material.toLowerCase())).slice(0, 6)
-    : SUGGESTIONS.slice(0, 6);
-
-  async function handleCheck(e) {
-    e.preventDefault();
-    if (!price || !material) return;
-    setLoading(true);
-    setResult(null);
-    try {
-      const res = await fetch("/api/invoice-check", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ material, invoiced_price: parseFloat(price), supplier: supplier || null, quantity_kg: quantity ? parseFloat(quantity) : null }),
-      });
-      const data = await res.json();
-      setResult(data.thread);
-      setHistory((prev) => [data.thread, ...prev].slice(0, 10));
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
-  }
+  const [fileName, setFileName] = useState(null);
+  const [analysisStep, setAnalysisStep] = useState(0);
 
   async function handleUpload(e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploadLoading(true);
-    setUploadItems(null);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/invoice-upload", { method: "POST", body: form });
-      const data = await res.json();
-      setUploadItems(data);
-      if (data.items?.length > 0) {
-        const first = data.items[0];
-        setMaterial(first.material || "");
-        setPrice(first.price_eur_per_kg?.toString() || "");
-        setSupplier(first.supplier || "");
-        setQuantity(first.quantity_kg?.toString() || "");
-      }
-    } catch (err) { console.error(err); }
-    finally { setUploadLoading(false); e.target.value = ""; }
+    setFileName(file.name);
+    runAnalysis(file.name);
+    e.target.value = "";
   }
 
-  function selectUploadItem(item) {
-    setMaterial(item.material || "");
-    setPrice(item.price_eur_per_kg?.toString() || "");
-    setSupplier(item.supplier || "");
-    setQuantity(item.quantity_kg?.toString() || "");
-    setUploadItems(null);
+  function runAnalysis(name) {
+    setLoading(true);
+    setResult(null);
+    setAnalysisStep(1);
+
+    const mockResult = INVOICE_CHECK_RESULTS[name];
+    const data = mockResult || INVOICE_CHECK_RESULTS["invoice_argan_oil_morocco.pdf"];
+
+    setTimeout(() => setAnalysisStep(2), 1200);
+    setTimeout(() => setAnalysisStep(3), 2800);
+    setTimeout(() => {
+      setResult(data);
+      setHistory((prev) => [data, ...prev].slice(0, 10));
+      setLoading(false);
+      setAnalysisStep(0);
+    }, 4200);
   }
+
+  function handleSampleClick(sampleName) {
+    setFileName(sampleName);
+    runAnalysis(sampleName);
+  }
+
+  const basePath = import.meta.env.BASE_URL || "/";
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -203,106 +178,79 @@ export default function InvoiceCheck() {
           Invoice Fairness Check
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
-          Enter any substance and price, or upload an invoice document. Three AI agents analyze whether the price is fair.
+          Upload an invoice or quote. Three AI agents analyze whether the price is fair, assess supply risk, and recommend action.
         </p>
       </div>
 
       {/* Upload zone */}
-      <div className="bg-white rounded-xl shadow-sm p-4 border-2 border-dashed border-gray-200 hover:border-brand-300 transition-colors">
-        <label className="flex items-center gap-4 cursor-pointer">
-          <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-            {uploadLoading ? <Loader2 className="w-6 h-6 text-gray-400 animate-spin" /> : <Upload className="w-6 h-6 text-gray-400" />}
+      <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-dashed border-gray-200 hover:border-brand-300 transition-colors">
+        <label className="flex flex-col items-center gap-4 cursor-pointer py-4">
+          <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center">
+            {loading ? <Loader2 className="w-8 h-8 text-brand-600 animate-spin" /> : <Upload className="w-8 h-8 text-brand-600" />}
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-700">Upload an invoice or quote</p>
-            <p className="text-xs text-gray-400">PDF, TXT, or CSV - AI will extract materials, prices, and quantities</p>
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-700">Drop an invoice file here or click to browse</p>
+            <p className="text-xs text-gray-400 mt-1">PDF, CSV, or TXT accepted</p>
           </div>
-          <input type="file" accept=".pdf,.txt,.csv,.doc,.docx" onChange={handleUpload} className="hidden" />
-          <span className="btn-secondary text-xs">Browse files</span>
+          <input type="file" accept=".pdf,.txt,.csv,.doc,.docx" onChange={handleUpload} className="hidden" disabled={loading} />
+          <span className="btn-secondary text-xs">Choose file</span>
         </label>
       </div>
 
-      {/* Extracted items from upload */}
-      {uploadItems && uploadItems.items?.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm p-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Extracted from {uploadItems.filename}</p>
-            <button onClick={() => setUploadItems(null)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
-          </div>
-          {uploadItems.items.map((item, i) => (
-            <button key={i} onClick={() => selectUploadItem(item)}
-              className="w-full text-left bg-gray-50 hover:bg-brand-50 rounded-lg p-3 transition-colors flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-900">{item.material}</p>
-                <p className="text-xs text-gray-500">{item.supplier || "Unknown supplier"}{item.quantity_kg ? ` · ${item.quantity_kg} kg` : ""}</p>
+      {/* Sample invoices */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <Download className="w-3.5 h-3.5" /> Sample invoices to try
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {SAMPLE_FILES.map((sample) => (
+            <button
+              key={sample.name}
+              onClick={() => handleSampleClick(sample.name)}
+              disabled={loading}
+              className="text-left bg-gray-50 hover:bg-brand-50 rounded-lg p-3 transition-colors border border-gray-100 hover:border-brand-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <FileText className="w-4 h-4 text-brand-600" />
+                <span className="text-sm font-medium text-gray-900">{sample.label}</span>
               </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-gray-900">{item.price_eur_per_kg?.toFixed(2)} <span className="text-xs font-normal text-gray-400">€/kg</span></p>
-                <p className="text-[10px] text-brand-600">Click to check fairness</p>
-              </div>
+              <p className="text-xs text-gray-500">{sample.desc}</p>
+              <a
+                href={`${basePath}${sample.name}`}
+                download={sample.name}
+                onClick={(ev) => ev.stopPropagation()}
+                className="text-[10px] text-brand-600 hover:underline mt-1 inline-block"
+              >
+                Download PDF
+              </a>
             </button>
           ))}
         </div>
-      )}
+      </div>
 
-      {/* Manual input form */}
-      <form onSubmit={handleCheck} className="bg-white rounded-xl shadow-sm p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Material / Substance *</label>
-            <input type="text" value={material} onChange={(e) => { setMaterial(e.target.value); setShowSuggestions(true); }}
-              onFocus={() => setShowSuggestions(true)} onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              placeholder="Type any material - e.g. Argan Oil, Coconut Oil, Beeswax..." required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
-            {showSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute z-10 top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
-                {filteredSuggestions.map((s) => (
-                  <button key={s} type="button" onMouseDown={() => { setMaterial(s); setShowSuggestions(false); }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-brand-50 text-gray-700">{s}</button>
-                ))}
-              </div>
-            )}
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Invoiced Price (EUR/kg) *</label>
-            <input type="number" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)}
-              placeholder="e.g. 52.80" required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Supplier (optional)</label>
-            <input type="text" value={supplier} onChange={(e) => setSupplier(e.target.value)}
-              placeholder="e.g. Cooperative Targanine"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Quantity (kg, optional)</label>
-            <input type="number" step="1" value={quantity} onChange={(e) => setQuantity(e.target.value)}
-              placeholder="e.g. 5000"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <p className="text-[11px] text-gray-400">
-            <Sparkles className="w-3 h-3 inline mr-1" />
-            Works with any raw material or ingredient - not limited to tracked materials
-          </p>
-          <button type="submit" disabled={loading || !price || !material}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
-            {loading ? <><Loader2 className="w-4 h-4 animate-spin" />Analyzing...</> : <><FileCheck className="w-4 h-4" />Check Fairness</>}
-          </button>
-        </div>
-      </form>
-
-      {/* Loading */}
+      {/* Loading animation */}
       {loading && (
-        <div className="bg-white rounded-xl shadow-sm p-8 text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-brand-600 animate-spin mx-auto" />
-          <p className="text-sm text-gray-600 font-medium">Three agents analyzing your invoice...</p>
-          <div className="flex items-center justify-center gap-6 text-xs text-gray-400">
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />Market Intel (GPT-4o)</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />Risk Agent (Gemini)</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />Procurement Advisor</span>
+        <div className="bg-white rounded-xl shadow-sm p-8 space-y-4">
+          <div className="text-center space-y-2">
+            <Loader2 className="w-8 h-8 text-brand-600 animate-spin mx-auto" />
+            <p className="text-sm text-gray-600 font-medium">Three agents analyzing your invoice...</p>
+            {fileName && <p className="text-xs text-gray-400">{fileName}</p>}
+          </div>
+          <div className="flex items-center justify-center gap-6 text-xs">
+            <span className={`flex items-center gap-1.5 transition-all ${analysisStep >= 1 ? "text-blue-600 font-medium" : "text-gray-300"}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${analysisStep === 1 ? "bg-blue-500 animate-pulse" : analysisStep > 1 ? "bg-blue-500" : "bg-gray-200"}`} />
+              Market Intel (GPT-4o)
+              {analysisStep > 1 && <CheckCircle className="w-3 h-3 text-blue-500" />}
+            </span>
+            <span className={`flex items-center gap-1.5 transition-all ${analysisStep >= 2 ? "text-purple-600 font-medium" : "text-gray-300"}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${analysisStep === 2 ? "bg-purple-500 animate-pulse" : analysisStep > 2 ? "bg-purple-500" : "bg-gray-200"}`} />
+              Risk Agent (Gemini)
+              {analysisStep > 2 && <CheckCircle className="w-3 h-3 text-purple-500" />}
+            </span>
+            <span className={`flex items-center gap-1.5 transition-all ${analysisStep >= 3 ? "text-green-600 font-medium" : "text-gray-300"}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${analysisStep === 3 ? "bg-green-500 animate-pulse" : "bg-gray-200"}`} />
+              Procurement Advisor
+            </span>
           </div>
         </div>
       )}
@@ -314,7 +262,7 @@ export default function InvoiceCheck() {
             <div className="bg-gray-900 text-white rounded-lg px-4 py-2 flex items-center gap-3">
               <FileText className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="text-sm font-medium">{result.material} - {result.invoiced_price?.toFixed(2)} EUR/kg</p>
+                <p className="text-sm font-medium">{result.material} - {result.invoiced_price?.toFixed(2)} EUR{result.quantity_kg ? `/kg` : `/MWh`}</p>
                 {result.supplier && <p className="text-[10px] text-gray-400">{result.supplier}{result.quantity_kg ? ` · ${result.quantity_kg.toLocaleString()} kg` : ""}</p>}
               </div>
             </div>
@@ -343,7 +291,7 @@ export default function InvoiceCheck() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">{h.material}</span>
-                      <span className="text-sm text-gray-500">{h.invoiced_price?.toFixed(2)} EUR/kg</span>
+                      <span className="text-sm text-gray-500">{h.invoiced_price?.toFixed(2)} EUR</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {vc && <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${vc.bg} ${vc.color}`}>{vc.label}</span>}
